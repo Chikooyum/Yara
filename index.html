@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Special for you!</title>
+    <style>
+        
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            overflow: hidden;
+        }
+
+        
+        .container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+        }
+
+        
+        .slider-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        
+        .slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .slide.active {
+            opacity: 1;
+        }
+
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            object-position: center;
+        
+        }
+
+        
+        .nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(0, 0, 0, 0.6);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 18px;
+            cursor: pointer;
+            z-index: 10;
+            transition: background-color 0.3s;
+        }
+
+        .nav-btn:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        .prev-btn {
+            left: 20px;
+        }
+
+        .next-btn {
+            right: 20px;
+        }
+
+        
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+
+        .overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .overlay-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .overlay-content h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .overlay-content p {
+            margin-bottom: 20px;
+            line-height: 1.6;
+            color: #666;
+        }
+
+        
+        button {
+            background-color: #4285f4;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #3367d6;
+        }
+
+        
+        input {
+            padding: 10px;
+            width: 100%;
+            max-width: 300px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        
+        .settings {
+            position: relative;
+            margin-top: 30px;
+        }
+
+        #gear-icon {
+            font-size: 24px;
+            cursor: pointer;
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+        }
+
+        #download-section {
+            margin-top: 20px;
+        }
+
+        #password-error {
+            color: #d93025;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        
+        #hidden-message {
+            margin-top: 20px;
+        }
+        .button-container {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.choice-btn {
+    padding: 10px 25px;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#yes-btn {
+    background-color: #4CAF50;
+    color: white;
+}
+
+#yes-btn:hover {
+    background-color: #45a049;
+}
+
+#no-btn {
+    background-color: #f44336;
+    color: white;
+}
+
+#no-btn:hover {
+    background-color: #d32f2f;
+}
+
+.google-form-link {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #4285f4;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    margin: 10px 0;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.google-form-link:hover {
+    background-color: #3367d6;
+}
+
+.small-text {
+    font-size: 12px;
+    color: #666;
+    font-style: italic;
+}
+
+#resultElement {
+    margin-top: 15px;
+    text-align: center;
+}
+    </style>
+</head>
+<body>
+    
+    <div class="container">
+        
+        <div class="slider-container">
+            <div id="slider" class="slider">
+                
+            </div>
+            <button class="nav-btn prev-btn">←</button>
+            <button class="nav-btn next-btn">→</button>
+        </div>
+        
+        
+        <div id="initial-overlay" class="overlay active">
+            <div class="overlay-content">
+                <h2>Hai cantik!!! 😊🫵</h2>
+                <p>Web ini dikhususkan buat kamu. Jadi pastikan kamu punya koneksi bagus dan stabil yaaa. 
+                    Kalau nggak nanti segala respon, gambar atau yang lainnya mungkin tidak akan terbuka secara optimal.
+                (DAN WEB INI TERJAMIN SECURE/AMAN)</p>
+                <button id="got-it-btn">Okeee</button>
+            </div>
+        </div>
+        
+        
+        <div id="loading-overlay" class="overlay">
+            <div class="overlay-content">
+                <h2>PENTING!!!</h2>
+                <p>Gambar yang akan ditampilkan mungkin akan memerlukan waktu untuk dimuat. Jadi
+                    bersabar yaaa agar semua gambar muncul dengan sempurna 
+                    Untuk hasil yang lebih bagus 👍 (Karena anak sabar disayang Tuhan 😎)</p>
+                <button id="continue-btn">Okeee</button>
+            </div>
+        </div>
+        <div id="loading-overlay2" class="overlay">
+            <div class="overlay-content">
+                <h2>Web ini Berbasis gambar, Untuk menggeser gambar nya, kamu hanya perlu menekan tombol Next dan Previous saja</h2>
+                <button id="continue-btn2">Okeee</button>
+            </div>
+        </div>
+        
+        
+        <div id="slide8-overlay" class="overlay">
+            <div class="overlay-content">
+                <h2>SEBELUM LANJUT, TAU GAAA KAMU ITU BAGAIKAN KAMERA?.</h2>
+                <button id="reveal-btn">Oh, iya?</button>
+                <div id="hidden-message" style="display: none;">
+                    <p>IYA, KARENA TIAP KALI MELIHAT KAMU, AKU TERSENYUM 😎😎😁🤭</p>
+                    <button id="close-slide8-btn">Lanjutkan</button>
+                </div>
+            </div>
+        </div>
+        
+        
+        <div id="last-slide-overlay" class="overlay">
+            <div class="overlay-content">
+                <h2>Jadi boleh kah aku meminta nomor mu? 🤭😇</h2>
+                <p>*Feel free untuk memilih yaaa! .</p>
+                <div class="button-container">
+                    <button id="yes-btn" class="choice-btn">Boleh</button>
+                    <button id="no-btn" class="choice-btn">Ga</button>
+                </div>
+                <div id="resultElement"></div>
+                <div class="settings">
+                    <span id="gear-icon">⚙</span>
+                    <div id="download-section" style="display: none;">
+                        <p></p>
+                        <p id="password-error" style="display: none;">Incorrect password. Please try again.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            let currentSlide = 0;
+            const totalSlides = 15;
+            let phoneNumbers = JSON.parse(localStorage.getItem('phoneNumbers')) || []; 
+    
+            
+            const imagePaths = [];
+            for (let i = 1; i <= totalSlides; i++) {
+                imagePaths.push(`${i}.png`);
+            }
+    
+            
+            const sliderContainer = document.getElementById('slider');
+            imagePaths.forEach((path, index) => {
+                const slide = document.createElement('div');
+                slide.className = 'slide';
+                if (index === 0) slide.classList.add('active');
+    
+                const img = document.createElement('img');
+                img.src = path;
+                img.alt = `Slide ${index + 1}`;
+                img.loading = 'lazy';
+    
+                slide.appendChild(img);
+                sliderContainer.appendChild(slide);
+            });
+    
+            
+            const prevBtn = document.querySelector('.prev-btn');
+            const nextBtn = document.querySelector('.next-btn');
+    
+            prevBtn.addEventListener('click', () => navigateSlider(-1));
+            nextBtn.addEventListener('click', () => navigateSlider(1));
+    
+            function navigateSlider(direction) {
+                
+                if (currentSlide === 8 && direction === 1) {
+                    showOverlay('slide8-overlay');
+                    return;
+                }
+    
+                
+                const newSlide = (currentSlide + direction + totalSlides) % totalSlides;
+    
+                
+                document.querySelectorAll('.slide')[currentSlide].classList.remove('active');
+    
+                
+                currentSlide = newSlide;
+                document.querySelectorAll('.slide')[currentSlide].classList.add('active');
+    
+                
+                if (currentSlide === totalSlides - 1 && direction === 1) {
+                    showOverlay('last-slide-overlay');
+                }
+            }
+    
+            function showOverlay(overlayId) {
+                document.getElementById(overlayId).classList.add('active');
+            }
+    
+            function hideOverlay(overlayId) {
+                document.getElementById(overlayId).classList.remove('active');
+            }
+    
+            document.getElementById('got-it-btn').addEventListener('click', () => {
+                hideOverlay('initial-overlay');
+                showOverlay('loading-overlay');
+            });
+    
+            document.getElementById('continue-btn').addEventListener('click', () => {
+                hideOverlay('loading-overlay');
+                showOverlay('loading-overlay2');
+
+            });
+            document.getElementById('continue-btn2').addEventListener('click', () => {
+                hideOverlay('loading-overlay2');
+
+            });
+    
+            document.getElementById('reveal-btn').addEventListener('click', () => {
+                document.getElementById('hidden-message').style.display = 'block';
+                document.getElementById('reveal-btn').style.display = 'none';
+            });
+    
+            document.getElementById('close-slide8-btn').addEventListener('click', () => {
+                hideOverlay('slide8-overlay');
+                document.querySelectorAll('.slide')[currentSlide].classList.remove('active');
+                currentSlide = 9;
+                document.querySelectorAll('.slide')[currentSlide].classList.add('active');
+            });
+    
+            document.getElementById('yes-btn').addEventListener('click', () => {
+    const resultElement = document.getElementById('resultElement');
+    
+    
+    resultElement.innerHTML = `
+    <p>Yeayyy...isi form ini ya untuk meninggalkan nomor kamu:</p>
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSfhDqsiJTeq5sGGRLyZq2GHScJWFcmm_hEAWdSAELcNegKvZQ/viewform?usp=dialog" 
+       class="google-form-link" target="_blank">
+        Klik Di Sini Untuk Menuju Form
+    </a>
+    <p class="small-text">*tenang saja, semua jawaban kamu hanya aku yang bisa liat, orang lain tidak bisa :)</p>
+`;
+
+    
+    if (document.getElementById('whatsapp-container')) {
+        document.getElementById('whatsapp-container').style.display = 'none';
+    }
+    
+    
+    if (document.getElementById('final-continue')) {
+        document.getElementById('final-continue').style.display = 'inline-block';
+    }
+});
+
+
+document.getElementById('no-btn').addEventListener('click', () => {
+    const resultElement = document.getElementById('resultElement');
+    
+    
+    resultElement.innerHTML = "Baiklah kalau begitu, mungkin kita tidak JODOH ;( terima kasih yaaa";
+    
+    
+    if (document.getElementById('final-continue')) {
+        document.getElementById('final-continue').style.display = 'inline-block';
+    }
+});
+    
+                
+                phoneNumbers.push(phoneInput.value.trim());
+                localStorage.setItem('phoneNumbers', JSON.stringify(phoneNumbers)); 
+                alert('TERIMA KASIH BANYAK YAA 😄 Nanti saya hubungi kamuuu. Maaf kalau caraku kurang menarik, semoga kamu terhibur 👋👋👋');
+    
+                
+                phoneInput.value = '';
+            });
+    
+            document.getElementById('gear-icon').addEventListener('click', () => {
+                const downloadSection = document.getElementById('download-section');
+                downloadSection.style.display = downloadSection.style.display === 'none' ? 'block' : 'none';
+            });
+    
+            document.getElementById('download-btn').addEventListener('click', () => {
+                const password = document.getElementById('password-input').value;
+                const passwordError = document.getElementById('password-error');
+    
+                if (password === 'asdbdjdh') {
+                    
+                    const blob = new Blob([phoneNumbers.join('\n')], { type: 'text/plain' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'data.txt';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                    passwordError.style.display = 'none';
+                } else {
+                    passwordError.style.display = 'block';
+                }
+            });
+    
+            document.getElementById('phone-input').addEventListener('input', function() {
+                this.value = this.value.replace(/[^0-9]/g, '');
+            });
+    
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'ArrowLeft') {
+                    navigateSlider(-1);
+                } else if (event.key === 'ArrowRight') {
+                    navigateSlider(1);
+                }
+            });
+    </script>
+</body>
+</html>
